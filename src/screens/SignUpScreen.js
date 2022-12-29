@@ -12,11 +12,12 @@ import { StatusBar } from 'expo-status-bar';
 import { WHITE } from '../colors';
 
 const SignUPScreen = () => {
+  const passwordRef = useRef();
+  const passwordConfirmRef = useRef();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
-  const passwordRef = useRef();
-  const passwordConfirmRef = useRef();
   const [isLoading, setIsLoading] = useState(false);
   const [disabled, setDisabled] = useState(true);
 

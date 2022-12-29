@@ -1,7 +1,12 @@
+import { StatusBar } from 'expo-status-bar';
 import Navigation from './navigations';
-import ReducerTest from './ReducerTest';
 
 const App = () => {
-  return <ReducerTest />;
+  return (
+    <>
+      <StatusBar style={'dark'} />
+      <Navigation />
+    </>
+  );
 };
 export default App;
