@@ -1,6 +1,7 @@
 import Navigation from './navigations';
+import ReducerTest from './ReducerTest';
 
 const App = () => {
-  return <Navigation />;
+  return <ReducerTest />;
 };
 export default App;

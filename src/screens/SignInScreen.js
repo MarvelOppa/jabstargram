@@ -1,11 +1,11 @@
-import { Image, Keyboard, StyleSheet, View } from 'react-native';
-import Input, { InputTypes } from '../components/Input';
-import { useEffect, useRef, useState } from 'react';
+import { Image, Keyboard, StyleSheet, View, ScrollView } from 'react-native';
+import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
 import SafeInputView from '../components/SafeInputView';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import TextButton from '../components/TextButton';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { AuthRoutes } from '../navigations/routes';
 import HR from '../components/HR';
 import { StatusBar } from 'expo-status-bar';
@@ -20,6 +20,17 @@ const SignInScreen = () => {
 
   const { top, bottom } = useSafeAreaInsets();
   const { navigate } = useNavigation();
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setEmail('');
+        setPassword('');
+        setIsLoading(false);
+        setDisabled(true);
+      };
+    }, [])
+  );
 
   useEffect(() => {
     setDisabled(!email || !password);
@@ -45,8 +56,11 @@ const SignInScreen = () => {
             resizeMode={'cover'}
           />
         </View>
-        <View
+        <ScrollView
           style={[styles.form, { paddingBottom: bottom ? bottom + 10 : 40 }]}
+          contentContainerStyle={{ alignItems: 'center' }}
+          bounces={false}
+          keyboardShouldPersistTaps={'always'}
         >
           <Input
             inputType={InputTypes.EMAIL}
@@ -56,6 +70,7 @@ const SignInScreen = () => {
             }}
             onSubmitEditing={() => passwordRef.current.focus()}
             styles={{ container: { marginBottom: 20 } }}
+            returnKeyType={ReturnKeyTypes.NEXT}
           />
           <Input
             ref={passwordRef}
@@ -66,6 +81,7 @@ const SignInScreen = () => {
             }}
             onSubmitEditing={onSubmit}
             styles={{ container: { marginBottom: 20 } }}
+            returnKeyType={ReturnKeyTypes.DONE}
           />
           <Button
             title={'SIGNIN'}
@@ -81,7 +97,7 @@ const SignInScreen = () => {
             title={'SIGNUP'}
             onPress={() => navigate(AuthRoutes.SIGN_UP)}
           />
-        </View>
+        </ScrollView>
       </View>
     </SafeInputView>
   );
@@ -96,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   form: {
-    alignItems: 'center',
+    flexGrow: 0,
     backgroundColor: WHITE,
     paddingHorizontal: 20,
     paddingTop: 40,
