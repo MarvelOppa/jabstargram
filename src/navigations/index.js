@@ -7,6 +7,7 @@ import { onAuthStateChanged } from '../api/auth';
 import { Asset } from 'expo-asset';
 import { initFirebase } from '../api/firebase';
 import * as SplashScreen from 'expo-splash-screen';
+import ContentTab from './ContentTab';
 
 const Navigation = () => {
   const [user, setUser] = useUserState();
@@ -58,7 +59,7 @@ const Navigation = () => {
 
   return (
     <NavigationContainer onReady={onReady}>
-      {user.uid ? <MainStack /> : <AuthStack />}
+      {user.uid ? <ContentTab /> : <AuthStack />}
     </NavigationContainer>
   );
 };
