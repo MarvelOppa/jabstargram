@@ -1,4 +1,11 @@
-import { Image, Keyboard, ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  Image,
+  Keyboard,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import { useReducer, useRef } from 'react';
 import Button from '../components/Button';
@@ -15,6 +22,8 @@ import {
   AuthFormTypes,
   initAuthForm,
 } from '../reducer/authFormReducer';
+import { getAuthErrorMessage, signUp } from '../api/auth';
+import { useUserState } from '../contexts/UserContext';
 
 const SignUPScreen = () => {
   const passwordRef = useRef();
@@ -24,6 +33,7 @@ const SignUPScreen = () => {
 
   const { top, bottom } = useSafeAreaInsets();
   const { navigate } = useNavigation();
+  const [, setUser] = useUserState();
 
   const updateForm = (payload) => {
     const newForm = { ...form, ...payload };
@@ -38,14 +48,18 @@ const SignUPScreen = () => {
     });
   };
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      console.log(form.email, form.password);
-      setTimeout(() => {
-        dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      }, 1000);
+      try {
+        const user = await signUp(form);
+        setUser(user);
+      } catch (e) {
+        const message = getAuthErrorMessage(e.code);
+        Alert.alert('회원가입 실패', message);
+      }
+      dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
 
@@ -69,17 +83,16 @@ const SignUPScreen = () => {
           <Input
             inputType={InputTypes.EMAIL}
             value={form.email}
-            onChangeText={(text) => updateForm(text.trim())}
+            onChangeText={(text) => updateForm({ email: text.trim() })}
             onSubmitEditing={() => passwordRef.current.focus()}
             styles={{ container: { marginBottom: 20 } }}
             returnKeyType={ReturnKeyTypes.NEXT}
           />
-
           <Input
             ref={passwordRef}
             inputType={InputTypes.PASSWORD}
             value={form.password}
-            onChangeText={(text) => updateForm(text.trim())}
+            onChangeText={(text) => updateForm({ password: text.trim() })}
             onSubmitEditing={() => passwordConfirmRef.current.focus()}
             styles={{ container: { marginBottom: 20 } }}
             returnKeyType={ReturnKeyTypes.NEXT}
@@ -88,7 +101,9 @@ const SignUPScreen = () => {
             ref={passwordConfirmRef}
             inputType={InputTypes.PASSWORD_CONFIRM}
             value={form.passwordConfirm}
-            onChangeText={(text) => updateForm(text.trim())}
+            onChangeText={(text) =>
+              updateForm({ passwordConfirm: text.trim() })
+            }
             onSubmitEditing={onSubmit}
             styles={{ container: { marginBottom: 20 } }}
             returnKeyType={ReturnKeyTypes.DONE}
