@@ -1,4 +1,11 @@
-import { Image, Keyboard, StyleSheet, View, ScrollView } from 'react-native';
+import {
+  Image,
+  Keyboard,
+  StyleSheet,
+  View,
+  ScrollView,
+  Alert,
+} from 'react-native';
 import Input, { InputTypes, ReturnKeyTypes } from '../components/Input';
 import { useCallback, useRef, useReducer } from 'react';
 import Button from '../components/Button';
@@ -15,7 +22,7 @@ import {
   AuthFormTypes,
   initAuthForm,
 } from '../reducer/authFormReducer';
-import { signIn } from '../api/auth';
+import { getAuthErrorMessage, signIn } from '../api/auth';
 
 const SignInScreen = () => {
   const passwordRef = useRef();
@@ -45,8 +52,13 @@ const SignInScreen = () => {
     Keyboard.dismiss();
     if (!form.disabled && !form.isLoading) {
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
-      const user = await signIn(form);
-      console.log(user);
+      try {
+        const user = await signIn(form);
+        console.log(user);
+      } catch (e) {
+        const message = getAuthErrorMessage(e.code);
+        Alert.alert('로그인 실패', message);
+      }
       dispatch({ type: AuthFormTypes.TOGGLE_LOADING });
     }
   };
