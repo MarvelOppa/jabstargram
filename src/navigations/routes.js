@@ -10,6 +10,6 @@ export const MainRoutes = {
 export const ContentRoutes = {
   HOME: 'home',
   LIST: 'list',
-  MAP: 'map;',
+  MAP: 'map',
   PROFILE: 'Profile',
 };
