@@ -7,29 +7,28 @@ import { onAuthStateChanged } from '../api/auth';
 import { Asset } from 'expo-asset';
 import { initFirebase } from '../api/firebase';
 import * as SplashScreen from 'expo-splash-screen';
-import ContentTab from './ContentTab';
+
+const ImageAssets = [
+  require('../../assets/cover.png'),
+  require('../../assets/home-clock.png'),
+  require('../../assets/home-map.png'),
+  require('../../assets/icon.png'),
+];
 
 const Navigation = () => {
   const [user, setUser] = useUserState();
   const [isReady, setIsReady] = useState(false);
 
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged((user) => {
-  //     if (user) {
-  //       setUser(user);
-  //     }
-  //     setIsReady(true);
-  //     unsubscribe();
-  //   });
-  // }, [setUser]);
-
   useEffect(() => {
     (async () => {
       try {
         await SplashScreen.preventAutoHideAsync();
-        await Asset.fromModule(
-          require('../../assets/cover.png')
-        ).downloadAsync();
+        await Promise.all(
+          ImageAssets.map((image) => Asset.fromModule(image).downloadAsync())
+        );
+        // await Asset.fromModule(
+        //   require('../../assets/cover.png')
+        // ).downloadAsync();
 
         initFirebase();
 
