@@ -6,12 +6,15 @@ import MapScreen from '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { PRIMARY, GRAY } from '../colors';
+import TabBarAddButton from '../components/TabBarAddButton';
 
 const Tab = createBottomTabNavigator();
 const getTabBarIcon = ({ focused, color, size, name }) => {
   const iconName = focused ? name : `${name}-outline`;
   return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
 };
+
+const AddButtonScreen = () => null;
 
 const ContentTab = () => {
   return (
@@ -38,6 +41,13 @@ const ContentTab = () => {
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'post' }),
         }}
       ></Tab.Screen>
+      <Tab.Screen
+        name={'AddButton'}
+        component={AddButtonScreen}
+        options={{
+          tabBarButton: () => <TabBarAddButton />,
+        }}
+      />
       <Tab.Screen
         name={ContentRoutes.MAP}
         component={MapScreen}
