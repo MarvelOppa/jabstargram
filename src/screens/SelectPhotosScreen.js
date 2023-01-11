@@ -1,15 +1,15 @@
 import { Button, StyleSheet, Text, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { MainRoutes } from '../navigations/routes';
+import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = () => {
+const SelectPhotosScreen = () => {
   const navigation = useNavigation();
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>HomeScreen</Text>
+      <Text style={styles.title}>SelectPhotosScreen</Text>
       <Button
-        title={'select'}
-        onPress={() => navigation.navigate(MainRoutes.SELECT_PHOTOS)}
+        title={'tab'}
+        onPress={() => navigation.navigate(MainRoutes.CONTENT_TAB)}
       />
     </View>
   );
@@ -26,4 +26,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default SelectPhotosScreen;

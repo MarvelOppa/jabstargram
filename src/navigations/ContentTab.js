@@ -5,6 +5,7 @@ import HomeScreen from '../screens/HomeScreen';
 import MapScreen from '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { PRIMARY, GRAY } from '../colors';
 
 const Tab = createBottomTabNavigator();
 const getTabBarIcon = ({ focused, color, size, name }) => {
@@ -14,12 +15,20 @@ const getTabBarIcon = ({ focused, color, size, name }) => {
 
 const ContentTab = () => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: PRIMARY.DARK,
+        tabBarInactiveTintColor: GRAY.DARK,
+        tabBarShowLabel: false,
+      }}
+    >
       <Tab.Screen
         name={ContentRoutes.HOME}
         component={HomeScreen}
         options={{
           tabBarIcon: (props) => getTabBarIcon({ ...props, name: 'home' }),
+          headerShown: true,
         }}
       ></Tab.Screen>
       <Tab.Screen
