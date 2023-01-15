@@ -8,6 +8,9 @@ import {
   updateProfile,
 } from 'firebase/auth';
 
+const PHOTO_URL =
+  'https://firebasestorage.googleapis.com/v0/b/japstargram.appspot.com/o/profile.png?alt=media';
+
 export const getAuthErrorMessage = (errorCode) => {
   switch (errorCode) {
     case AuthErrorCodes.USER_DELETED:
